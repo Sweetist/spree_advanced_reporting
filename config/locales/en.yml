@@ -1,4 +1,9 @@
 en:
+  to: "to"
+  search: "Search"
+  start: "Start"
+  end: "End"
+  download_csv: "Download CSV"
   adv_report:
     revenue: "Revenue"
     units: "Units"
@@ -13,3 +18,9 @@ en:
     sales_total: 'Sales Total'
     daily_details: 'Daily Sales Detail'
     order_details: "Order Details"
+    detailed: "Order details per day"
+    transaction_details: "Transaction Details"
+    number: "Number"
+    date: "Date"
+    subtotal: "Subtotal"
+    total: "Total"

@@ -70,6 +70,31 @@ Spree::Admin::ReportsController.class_eval do
     end
   end
 
+  def detailed
+
+    @report = Spree::DetailedReport.new(params)
+    @labels = Spree::Adjustment.select(:label).distinct.order(:label)
+
+
+    respond_to do |format|
+      format.html { render template: 'spree/admin/reports/detailed_report' }
+      format.csv { render text: @report.to_csv }
+    end
+
+  end
+
+  def transaction
+
+    @report = Spree::TransactionReport.new(params)
+    @labels = Spree::Adjustment.select(:label).distinct.order(:label)
+
+
+    respond_to do |format|
+      format.html { render template: 'spree/admin/reports/transaction_report' }
+      format.csv { render text: @report.to_csv }
+    end
+  end
+
   private
 
   def actions
@@ -83,7 +108,9 @@ Spree::Admin::ReportsController.class_eval do
       :geo_revenue,
       :geo_units,
       :count,
-      :order_details
+      :order_details,
+      :detailed,
+      :transaction
     ]
   end
 

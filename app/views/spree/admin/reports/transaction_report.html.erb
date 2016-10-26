@@ -1,0 +1,75 @@
+<% content_for :page_title do %>
+  <%= t("adv_report.transaction_details") %>,
+  <% if params[:begin_date] && params[:end_date] %>
+    <%= params[:begin_date] %> <%= t("to") %> <%= params[:end_date] %>
+  <% else %>
+    <%= 1.month.ago.strftime('%m/%d/%Y') %> <%= t("to") %> <%= Time.now.strftime('%m/%d/%Y') %>
+  <% end %>
+<% end %>
+
+
+<h3><%= Spree.t(:date_range) %></h3>
+
+<%= form_tag({}, { method: :get, class: 'form-inline' }) do %>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <%= label_tag 'begin_date', t("start"), class: 'inline' %>
+        <%= text_field_tag 'begin_date',
+          (Time.now - 1.month).beginning_of_day.strftime('%d/%m/%Y'),
+          {
+            class: 'datepicker datepicker-from form-control',
+            required: true
+          }
+        %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag 'end_date', t("end"), class: 'inline' %>
+        <%= text_field_tag 'end_date',
+          Time.now.end_of_day.strftime('%d/%m/%Y'),
+          {
+            class: 'datepicker datepicker-to form-control',
+            required: true
+          }
+        %>
+      </div>
+      <%= submit_tag t("search"), class: 'btn btn-success' %>
+    </div>
+  </div>
+<% end %>
+
+<%= link_to t('download_csv'), params.merge({format: 'csv'}) %>
+
+
+<table class="table">
+  <tr>
+    <th><%= t("adv_report.number") %></th>
+    <th><%= t("adv_report.date") %></th>
+
+    <th><%= t("adv_report.subtotal") %></th>
+    <% @labels.each do |label| %>
+      <th><%= label.label %></th>
+    <% end %>
+    <th>Total</th>
+  </tr>
+
+  <% @report.line_items.each_with_index do |line, index| %>
+
+
+    <tr>
+      <td><%= line.number %></td>
+      <td><%= line.date %></td>
+
+      <td><%= number_to_currency(line.subtotal) %></td>
+      <% @labels.each do |label| %>
+        <td><%= number_to_currency(line.order_infos[label.label]) %></td>
+      <% end %>
+      <td><%= number_to_currency(line.total) %></td>
+    </tr>
+
+    <%# Set the @line var to line.number so we know when we've hit a new order %>
+
+  <% end %>
+</table>
+
